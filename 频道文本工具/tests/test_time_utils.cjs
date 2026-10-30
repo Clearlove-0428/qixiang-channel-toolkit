@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict');const {inferPostTime}=require('../浏览器手动采集/time_utils.js');
+const captured='2026-10-26T07:00:00.000Z';
+const minutes=inferPostTime('7分钟前',captured,30);
+assert.equal(minutes.created_at_estimated,'2026-10-26T06:53:00.000Z');
+assert.equal(minutes.time_method,'relative_estimate');
+assert.equal(inferPostTime('昨天 12:30',captured).created_at_estimated,'2026-10-25T04:30:00.000Z');
+assert.equal(inferPostTime('12-31',captured).created_at_estimated,'2025-12-30T16:00:00.000Z');
+assert.equal(inferPostTime('2026-10-26',captured).time_precision,'day');
+assert.equal(inferPostTime('时间未知',captured).time_method,'unknown');
+console.log('时间推算：相对标签、页面驻留误差、昨天、跨年和日期精度通过。');

@@ -1,0 +1,22 @@
+{
+  "schema": "synthetic-observation-example.v1",
+  "captured_at": "2026-01-01T08:00:00+08:00",
+  "scope": "完全虚构的功能演示，不对应真实频道成员或事件。",
+  "posts": [
+    {
+      "id": "B_demo_card",
+      "text": "【虚构示例】校园卡丢失后应先查询哪个办事入口？",
+      "preview_only": false,
+      "visible_comments": [
+        {
+          "text": "【虚构回复】请先查学校办事大厅的校园卡页面。"
+        }
+      ]
+    },
+    {
+      "id": "B_demo_course",
+      "text": "【虚构示例】分享一份课程复习目录，请以本学期教师要求为准。",
+      "preview_only": true
+    }
+  ]
+}

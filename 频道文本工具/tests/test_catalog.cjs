@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const data={qixiang_page_observations_v1:[{posts:[{id:'B_old',text:'旧帖子'}]}]};
+const context=vm.createContext({chrome:{storage:{local:{async get(keys){return Object.fromEntries((Array.isArray(keys)?keys:[keys]).map(k=>[k,data[k]]));},async set(values){Object.assign(data,values);}}}},Date,Set,Error,JSON,Math,Object,String,Boolean,Array,Number});
+vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../浏览器手动采集/catalog.js'),'utf8'),context);
+(async()=>{
+ const catalog=context.QixiangCatalog;
+ let index=await catalog.load();
+ let result=catalog.select({posts:[{id:'B_old',text:'旧帖子'},{id:'B_new',text:'新帖子'}]},index);
+ assert.equal(result.added,1);assert.equal(result.skipped.length,1);
+ await context.chrome.storage.local.set({[catalog.INDEX_KEY]:index});
+ data.qixiang_page_observations_v1=[];
+ index=await catalog.load();
+ result=catalog.select({posts:[{id:'B_new',text:'新帖子'}]},index);
+ assert.equal(result.added,0);assert.equal(result.snapshot.posts.length,0);
+ result=catalog.select({posts:[{id:'B_new',text:'新帖子完整正文',preview_only:false,visible_comments:[{text:'具体回应'}]}]},index);
+ assert.equal(result.enriched,1);assert.equal(result.snapshot.posts[0].record_kind,'supplement');
+ for(let i=0;i<2000;i++)catalog.select({posts:[{id:'B_test_'+i,text:'合成帖子'}]},index);
+ assert.equal(Object.keys(index.entries).length,2002);
+ console.log('长期索引测试：迁移旧记录、跨批去重、清空后保留、详情补充、2000帖容量通过。');
+})().catch(error=>{console.error(error);process.exitCode=1;});

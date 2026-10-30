@@ -1,0 +1,30 @@
+# Local Python / Node installations
+.venv/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+# Collected material and generated outputs
+/调研资料库/
+/频道文本工具/采集快照/
+/test-output/
+/浏览器登录配置/
+*.sqlite*
+*.db
+*.db-*
+*.log
+*.gguf
+*.onnx
+*.zip
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+local_connection.json
+采集连接.json
+本地模型连接.json
+*.pem
+*.key
+# OS files
+.DS_Store
+Thumbs.db

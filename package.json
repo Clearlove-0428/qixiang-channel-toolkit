@@ -1,0 +1,16 @@
+{
+  "name": "qixiang-channel-toolkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "启翔湖畔频道的本地资料管理、页面观察与分析工具",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node scripts/run-node-tests.cjs",
+    "test:unit": "node scripts/run-node-tests.cjs --unit"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

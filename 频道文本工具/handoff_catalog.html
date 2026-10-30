@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>启翔湖畔逐帖资料</title><style>*{box-sizing:border-box}body{margin:0;background:#f1f4f3;color:#213c42;font:16px/1.7 'Microsoft YaHei',sans-serif}main{max-width:1120px;margin:30px auto;padding:30px;background:white}h1{margin:0;font-size:28px}h2{font-size:20px}p{white-space:pre-wrap;overflow-wrap:anywhere}.meta{color:#617579;font-size:14px}.filters{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}input,select,button{padding:10px;border:1px solid #b4c9c7;border-radius:5px;background:white;font:inherit}input{flex:1;min-width:240px}button{cursor:pointer;color:#176d67}article{border-top:1px solid #d6e1e0;padding:23px 0}summary{cursor:pointer;color:#176d67}.assets{display:flex;flex-wrap:wrap;gap:14px;margin:12px 0}.asset{width:230px;font-size:13px;overflow-wrap:anywhere;word-break:break-word;min-width:0}.asset img{width:100%;height:175px;object-fit:contain;object-position:top;background:#eef2f1}.asset a{display:block;color:#176d67;overflow-wrap:anywhere}.comments{padding-left:22px}.pager{display:flex;gap:20px;align-items:center}.tag{background:#e4f0ed;padding:3px 8px;border-radius:4px}a{color:#176d67}@media(max-width:700px){main{margin:0;padding:20px}.asset{width:45%}}</style>
+<main><h1>启翔湖畔逐帖资料</h1><p class="meta">第六组 · 原生分区、正文、评论与媒体按帖子对应。候选分类与图片含义处理进度分列。点击缩略图可打开原文件。</p><div class="filters"><input id="query" placeholder="搜索研究编号、帖子ID、正文或主题"><select id="board"><option value="">全部原生分区</option></select><select id="kind"><option value="">全部模型候选</option></select><button id="search">查找</button></div><p id="count" class="meta"></p><div class="pager"><button id="prev">上一页</button><span id="page"></span><button id="next">下一页</button></div><section id="list"></section></main>
+<script src="帖子目录数据.js"></script><script>
+const all=window.POST_CATALOG||[],byId=id=>document.getElementById(id);let found=all,number=0;const size=20;
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n}
+for(const [id,key] of [['board','board'],['kind','category']])for(const value of [...new Set(all.map(p=>p[key]).filter(Boolean))].sort()){
+ const o=node('option',value);o.value=value;byId(id).append(o)
+}
+function render(){
+ byId('list').replaceChildren();byId('count').textContent=`匹配 ${found.length} 帖 · 本批共 ${all.length} 帖 · 每页${size}帖`;
+ const pages=Math.max(1,Math.ceil(found.length/size));number=Math.min(number,pages-1);byId('page').textContent=`${number+1} / ${pages}`;
+ byId('prev').disabled=number===0;byId('next').disabled=number+1>=pages;
+ for(const p of found.slice(number*size,(number+1)*size)){
+  const card=node('article');card.dataset.postId=p.post_id;card.append(node('h2',p.id+' · '+p.board),node('span',p.category+' / '+p.topic,'tag'),node('p',p.post_id+' · '+(p.time_label||'时间标签见完整资料')+' · '+(p.preview?'列表预览':'详情正文'),'meta'),node('p',p.text||'主帖文字为空，结合已保存图像查看。'));
+  const source=node('a','打开原帖');source.href=p.url;source.target='_blank';source.rel='noopener';card.append(source);
+  const assets=node('div',undefined,'assets');
+  for(const a of p.assets.filter(a=>a.role!=='头像')){
+   const box=node('div',undefined,'asset');box.append(node('div',a.role+' '+a.order+' · '+(a.exists?'文件已保存':a.saved_status)));
+   if(a.exists){const link=node('a');link.href=a.browser_path;link.target='_blank';const img=node('img');img.src=a.browser_path;img.loading='lazy';img.alt=p.id+' '+a.role+' '+a.order;link.append(img);box.append(link)}
+   box.append(node('div',a.project_path));assets.append(box)
+  }card.append(assets);
+  if(p.comments.length){const details=node('details'),ol=node('ol',undefined,'comments');details.append(node('summary','已保存评论文字 '+p.comments.length+' 条（按当时可见范围）'));for(const c of p.comments)ol.append(node('li',c.text));details.append(ol);card.append(details)}
+  const avatar=p.assets.find(a=>a.role==='头像'&&a.exists);if(avatar){const details=node('details');details.append(node('summary','头像资料（本机核对）'));const link=node('a','打开头像');link.href=avatar.browser_path;link.target='_blank';details.append(link);card.append(details)}
+  byId('list').append(card)
+ }
+}
+function search(){const q=byId('query').value.trim().toLowerCase(),board=byId('board').value,kind=byId('kind').value;found=all.filter(p=>(!board||p.board===board)&&(!kind||p.category===kind)&&(!q||(p.id+' '+p.post_id+' '+p.text+' '+p.topic).toLowerCase().includes(q)));number=0;render()}
+byId('search').onclick=search;byId('query').onkeydown=e=>{if(e.key==='Enter')search()};byId('board').onchange=search;byId('kind').onchange=search;
+byId('prev').onclick=()=>{number--;render();scrollTo(0,0)};byId('next').onclick=()=>{number++;render();scrollTo(0,0)};render();
+</script></html>

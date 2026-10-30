@@ -1,0 +1,11 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>启翔湖畔采集</title><style>
+body{width:340px;margin:0;padding:18px;font:14px/1.65 system-ui,sans-serif;color:#173b4a}h1{font-size:19px;margin:0 0 10px}.note{font-size:12px;color:#657987}button{width:100%;padding:10px;border:1px solid #b5c9ce;border-radius:7px;background:white;color:inherit;font:inherit;margin-top:9px;cursor:pointer}.primary{background:#167b78;color:white;border-color:#167b78}button:disabled{opacity:.45;cursor:default}input[type=number],select{padding:5px;border:1px solid #b5c9ce;border-radius:5px;font:inherit}#status,#runStatus{padding:10px;background:#edf6f5;border-radius:7px;margin:10px 0;font-size:12px;overflow-wrap:anywhere}.error{color:#a23328;background:#fff0eb!important}label{display:block;margin:9px 0}summary{cursor:pointer;color:#657987}
+</style></head><body><h1>启翔湖畔正式采集</h1><p class="note">图文记录会直接写入本机资料库。请先打开资料管理，并保持频道标签页在前台。</p>
+<div id="catalogStatus" class="note"></div><label>正式资料总目标 <input id="target" type="number" min="1" max="10000" value="10000" style="width:95px"> 帖</label>
+<label>详情与评论 <select id="detailEvery"><option value="5">每5个新帖读取1帖</option><option value="1">每个新帖都读取</option><option value="10">每10个新帖读取1帖</option><option value="0">本轮只采列表</option></select></label>
+<label><input id="screenshots" type="checkbox" checked> 自动保存帖子截图</label>
+<details><summary>运行设置</summary><label>最多翻屏 <input id="maxSteps" type="number" value="15000" min="2" max="30000" style="width:85px"></label><label>翻屏等待毫秒 <input id="interval" type="number" value="1500" min="1100" style="width:85px"></label></details>
+<button id="start" class="primary">开始自动采集</button><button id="stop">停止并保存进度</button><div id="runStatus">等待开始。</div>
+<button id="capture">保存当前详情与可见评论</button><button id="dashboard">打开资料管理页</button><div id="status">正在连接本机资料库……</div>
+<p class="note">截图来自真实网页像素。长帖逐段记录，覆盖情况在资料库标明；评论记录已呈现的内容。界面切到后台时，自动采集会等待。</p>
+<script src="popup.js"></script></body></html>

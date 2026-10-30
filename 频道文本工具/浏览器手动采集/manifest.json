@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "启翔湖畔页面观察记录",
+  "version": "3.0.0",
+  "description": "按需缓慢滚动频道列表，记录已呈现的帖子、图片地址及详情页可见评论，保存在本机。",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["http://127.0.0.1:8765/*"],
+  "background": {"service_worker":"background.js"},
+  "action": {
+    "default_title": "记录当前频道页面",
+    "default_popup": "popup.html"
+  }
+}
